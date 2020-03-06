@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
         delete=(Button)findViewById(R.id.btn_delete);
         AddData();
         viewall();
+        upgradeData();
+        DeleteData();
     }
     public void AddData()
     {
@@ -50,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+//*******************************************************************************
     public  void viewall()
     {
         view.setOnClickListener(new View.OnClickListener()
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+//*****************************************************************************************
 
     public  void showMessage(String Title,String Message) // showing a alert dialog box.
     {
@@ -86,4 +89,37 @@ public class MainActivity extends AppCompatActivity {
         builder.setMessage(Message);
         builder.show();
     }
+
+//***********************************************************************************************
+   public  void upgradeData()
+   {
+       update.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               int isUpdated=myDb.updateData(name.getText().toString(),surname.getText().toString(), marks.getText().toString(),id.getText().toString());
+
+               if(isUpdated!=0)
+                   Toast.makeText(MainActivity.this,"data updated",Toast.LENGTH_LONG).show();
+               else
+                   Toast.makeText(MainActivity.this,"can't update this",Toast.LENGTH_LONG).show();
+
+           }
+       });
+   }
+//*******************************************************************************************
+    public  void  DeleteData()
+    {
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                int isDeleted=myDb.delData(id.getText().toString());
+                if (isDeleted>0)
+                    Toast.makeText(MainActivity.this,"data Deleted.",Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(MainActivity.this,"Can't Delete.",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+ //****************************************************************
 }

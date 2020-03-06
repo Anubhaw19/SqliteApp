@@ -18,24 +18,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    public DatabaseHelper(@Nullable Context context) {
+
+    public DatabaseHelper(@Nullable Context context)
+    {
             super(context, DATABASE_NAME, null, 1);
     }
-
+//**************************************************************
     @Override
-    public void onCreate(SQLiteDatabase db) {
-    db.execSQL("create table "+TABLE_NAME+"(ID INTEGER primary key autoincrement,NAME TEXT,SURNAME TEXT ,MARKS INTEGER)");
+    public void onCreate(SQLiteDatabase db)
+    {
+    db.execSQL("create table "+TABLE_NAME+"(ID INTEGER primary key autoincrement,NAME TEXT,SURNAME TEXT ,MARKS INTEGER)");// this will execute our SQL statement & create a table.
     }
-
+//***************************************************************
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("drop table if exists "+TABLE_NAME);
-        onCreate(db);
+        db.execSQL("drop table if exists "+TABLE_NAME); // it will drop table if already existing .
+        onCreate(db);// this  is again calling onCreate method ,to create a new table ,after deleting the previously existing table.
     }
-    public boolean insertData(String name,String surname,String marks) // this method is used to store data in table
+    //***********************************************************
+    public boolean insertData(String name,String surname,String marks) // this method is used to insert data in table.
     {
-        SQLiteDatabase db=this.getWritableDatabase();
-        ContentValues contentValues=new ContentValues();
+        SQLiteDatabase db=this.getWritableDatabase();// creating SQLite database Object, for getting writable database.
+        ContentValues contentValues=new ContentValues();// creating an object of class "ContentValues" and calling "put" methods on that object to store the value in the desired coloumn,like key-value parameter.
         contentValues.put(COL_2,name);
         contentValues.put(COL_3,surname);
         contentValues.put(COL_4,marks);
@@ -45,11 +49,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else
             return true;
     }
+    //*************************************************************
     public Cursor getAllData() //This interface provides random read-write access to the result set returned  by a database query.
-
     {
         SQLiteDatabase db=this.getWritableDatabase();
-        Cursor res=db.rawQuery(" select * from "+TABLE_NAME,null);
+        Cursor res=db.rawQuery(" select * from "+TABLE_NAME,null);// this will show all data in the table.
         return  res;
     }
+    //**************************************************************
+
+    public  int updateData(String name,String surname,String marks,String id)
+    {
+        SQLiteDatabase db= this.getWritableDatabase();
+        ContentValues contentValues=new ContentValues();
+        contentValues.put(COL_1,id);
+        contentValues.put(COL_2,name);
+        contentValues.put(COL_3,surname);
+        contentValues.put(COL_4,marks);
+
+        return  db.update(TABLE_NAME,contentValues," id = ? ",new String[]{id});
+
+    /* ?s in the where clause, which will be replaced by the values from whereArgs. The values will be bound as Strings.*/
+    }
+ //****************************************************************************************
+
+     public int delData(String id)
+     {
+         SQLiteDatabase db=this.getWritableDatabase();
+         return db.delete(TABLE_NAME," id=? ",new String[] {id});
+     }
+//***********************************************************************
 }
